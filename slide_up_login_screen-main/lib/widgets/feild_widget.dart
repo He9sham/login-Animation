@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class FieldWidget extends StatelessWidget {
   final String title;
   final IconData icon;
   final Function(String) onchanged;
-   bool obscureText;
-   FieldWidget(
+  bool obscureText;
+  FieldWidget(
       {super.key,
-       this.obscureText = false,
+      this.obscureText = false,
       required this.title,
       required this.icon,
       required this.onchanged});
@@ -19,6 +20,12 @@ class FieldWidget extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.grey.shade300, borderRadius: BorderRadius.circular(25)),
       child: TextFormField(
+        // ignore: body_might_complete_normally_nullable
+        validator: (data) {
+          if (data!.isEmpty) {
+            return 'Please enter correct data';
+          }
+        },
         obscureText: obscureText,
         onChanged: onchanged,
         decoration: InputDecoration(

@@ -1,5 +1,4 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -9,7 +8,6 @@ import 'package:slide_up_login/pages/Cubit/Chat_cubit/chat_cubit.dart';
 import 'package:slide_up_login/pages/Cubit/login_cubit/login_cubit.dart';
 import 'package:slide_up_login/widgets/show_up_animation.dart';
 import 'package:slide_up_login/widgets/text_widget.dart';
-
 import '../widgets/clippers.dart';
 import '../widgets/feild_widget.dart';
 
@@ -35,17 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
     var height = MediaQuery.of(context).size.height;
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
-        if (state is LoginLoading) {
-          isloading = true;
-        } else if (state is LoginSuccess) {
-          BlocProvider.of<ChatCubit>(context).getmessage();
-          Navigator.pushNamed(context, ChatPage.id, arguments: email);
-          isloading = false;
-        } else if (state is LoginFailuer) {
-          Awesome_widgets(
-              context, DialogType.error, 'error', state.errormessage);
-          isloading = false;
-        }
+        listener_method(state, context);
       },
       builder: (context, state) => ModalProgressHUD(
         inAsyncCall: isloading,
@@ -236,5 +224,20 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  // ignore: non_constant_identifier_names
+  void listener_method(LoginState state, BuildContext context) {
+        if (state is LoginLoading) {
+      isloading = true;
+    } else if (state is LoginSuccess) {
+      BlocProvider.of<ChatCubit>(context).getmessage();
+      Navigator.pushNamed(context, ChatPage.id, arguments: email);
+      isloading = false;
+    } else if (state is LoginFailuer) {
+      Awesome_widgets(
+          context, DialogType.error, 'error', state.errormessage);
+      isloading = false;
+    }
   }
 }
